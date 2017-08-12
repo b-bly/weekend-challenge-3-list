@@ -42,6 +42,29 @@ router.get('/', function (req, res) {
     });
 });
 
+router.post('/deleteItems', function (req, res) {
+    console.log('message post was hit!');
+    var ids = req.body.ids.replace('"', '');
+    pool.connect(function (errorConnectingToDatabase, client, done) {
+       
+        if (errorConnectingToDatabase) {
+            console.log('Error connecting to database: ', errorConnectingToDatabase);
+            res.sendStatus(500);
+        } else {
+            client.query('DELETE FROM list WHERE id IN' + ids, function (errorMakingQuery, result) {
+                done();
+                if (errorMakingQuery) {
+                    console.log('Error making database query: ', errorMakingQuery);
+                    res.sendStatus(500);
+                } else {
+                    res.sendStatus(201);
+                }
+            });
+        }
+    });
+});
+
+
 // router.put('/', function (req, res) {
 //     console.log('message put was hit!');
 //     pool.connect(function (errorConnectingToDatabase, client, done) {
