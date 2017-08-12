@@ -5,12 +5,13 @@ var pool = require('../modules/pool.js');
 router.post('/', function (req, res) {
     console.log('message post was hit!');
     pool.connect(function (errorConnectingToDatabase, client, done) {
-        done();
+       
         if (errorConnectingToDatabase) {
             console.log('Error connecting to database: ', errorConnectingToDatabase);
             res.sendStatus(500);
         } else {
-            client.query('INSERT INTO list (name, message) VALUES ($1);', [req.body.item], function (errorMakingQuery, result) {
+            client.query('INSERT INTO list (item) VALUES ($1)', [req.body.item], function (errorMakingQuery, result) {
+                done();
                 if (errorMakingQuery) {
                     console.log('Error making database query: ', errorMakingQuery);
                     res.sendStatus(500);
