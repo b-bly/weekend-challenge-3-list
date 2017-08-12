@@ -2,14 +2,15 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-var list = require('./routes/list.js')
+var list = require('./routes/list');
 
 var port = 5000;
 
 
-app.use(express.static('public'));
+app.use(express.static('../public'));
 app.use(bodyParser.urlencoded({extended: true}));
-//app.use('/list', list);
+console.log('made it to list', list);
+app.use('/list', list);
 
 
 app.listen(port, function() {
