@@ -3,7 +3,7 @@ var router = express.Router();
 var pool = require('../modules/pool.js');
 
 router.post('/', function (req, res) {
-    console.log('message post was hit!');
+    console.log('list post was hit!');
     pool.connect(function (errorConnectingToDatabase, client, done) {
        
         if (errorConnectingToDatabase) {
@@ -43,7 +43,7 @@ router.get('/', function (req, res) {
 });
 
 router.post('/deleteItems', function (req, res) {
-    console.log('message post was hit!');
+    console.log('list deleteItems was hit!');
     var ids = req.body.ids.replace('"', '');
     pool.connect(function (errorConnectingToDatabase, client, done) {
        
@@ -64,5 +64,25 @@ router.post('/deleteItems', function (req, res) {
     });
 });
 
-
+router.post('/updateToComplete', function (req, res) {
+    console.log('updateToComplete post was hit!');
+    var id = req.body.id
+    pool.connect(function (errorConnectingToDatabase, client, done) {
+       
+        if (errorConnectingToDatabase) {
+            console.log('Error connecting to database: ', errorConnectingToDatabase);
+            res.sendStatus(500);
+        } else {
+            client.query('UPDATE list SET complete = \'y\' WHERE id=\'' + id + '\';', function (errorMakingQuery, result) {
+                done();
+                if (errorMakingQuery) {
+                    console.log('Error making database query: ', errorMakingQuery);
+                    res.sendStatus(500);
+                } else {
+                    res.sendStatus(201);
+                }
+            });
+        }
+    });
+});
 module.exports = router;

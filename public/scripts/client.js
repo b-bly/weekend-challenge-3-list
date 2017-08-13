@@ -4,26 +4,18 @@ $(document).ready(function () {
     $('#addItemButton').on('click', postListItems);
     $('#deleteItemButton').on('click', deleteChecked);
     $('#listContainer').on('click', '.btn-success', function () {
-        console.log('item div: ', $(this).parent());
-        $(this).parent().animate({ backgroundColor: "#5cb85c" }, 500, function () {
+        //console.log('item div: ', $(this).parent());
+        var $div = $(this).parent();
+        updateToComplete($div.data().id);
+        $div.animate({ backgroundColor: "#5cb85c" }, 500, function () {
             $(this).children('.btn-success').remove();
         });
-        //.css('background-color', '#5cb85c');
-        $div = $(this).parent();
+        
+        $div.data('complete', 'y');
+        //console.log($div.data().complete);
         $listDivs = $(this).parent().siblings('div');
         $div.fadeOut(500, function () {
             $div.insertAfter($listDivs[$listDivs.length - 1]).fadeIn(500);
-        });
-
-        $('.move-down').click(function (e) {
-            var $div = $(this).closest('div');
-
-            // Does the element have anywhere to move?
-            if ($div.index() <= ($div.siblings('div').length - 1)) {
-                $div.fadeOut('slow', function () {
-                    $div.insertAfter($div.next('div')).fadeIn('slow');
-                });
-            }
         });
     });
     getListItems();
@@ -35,6 +27,7 @@ $(document).ready(function () {
         listArray.forEach(function (row) {
             $listDiv = $('<div class="item"></div>');
             $listDiv.data('id', row.id);
+            $listDiv.data('complete', row.complete);
             listItemHtml = '<label><input type="checkbox" name="checkbox" value="">  ' + row.item + '</label>';
             $listDiv.prepend(listItemHtml);
             if (row.complete == 'y') {
@@ -61,6 +54,7 @@ $(document).ready(function () {
     function postListItems() {
         var listItemObj = {};
         listItemObj.item = $('#itemInput').val();
+        listItemObj.complete = 'n';
         console.log(listItemObj);
         $.ajax({
             method: 'POST',
@@ -88,7 +82,7 @@ $(document).ready(function () {
             $.ajax({
                 method: 'POST',//I don't know how to use DELETE to delete multiple records.
                 url: '/listItems/deleteItems',
-                data: idsObj, //should be able to send a string
+                data: idsObj, 
                 success: function (response) {
                     console.log('delete/post request successful');
                     getListItems();
@@ -97,5 +91,18 @@ $(document).ready(function () {
         } else {
             alert('Close one.');
         }
+    }
+
+    function updateToComplete(id) {
+        var idObj = {id: id};
+        $.ajax({
+            method: 'POST',
+            url: '/listItems/updateToComplete',
+            data: idObj, 
+            success: function (response) {
+                console.log('delete/post request successful');
+                //getListItems();
+            }
+        });
     }
 }); //document ready end
