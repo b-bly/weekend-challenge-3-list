@@ -5,22 +5,22 @@ $(document).ready(function () {
     $('#deleteItemButton').on('click', deleteChecked);
     $('#listContainer').on('click', '.btn-success', function () {
         console.log('item div: ', $(this).parent());
-        $(this).parent().animate({backgroundColor: "#5cb85c" }, 500, function (){
+        $(this).parent().animate({ backgroundColor: "#5cb85c" }, 500, function () {
             $(this).children('.btn-success').remove();
         });
         //.css('background-color', '#5cb85c');
         $div = $(this).parent();
         $listDivs = $(this).parent().siblings('div');
-        $div.fadeOut(500, function() {
+        $div.fadeOut(500, function () {
             $div.insertAfter($listDivs[$listDivs.length - 1]).fadeIn(500);
         });
 
-        $('.move-down').click(function(e){
+        $('.move-down').click(function (e) {
             var $div = $(this).closest('div');
-        
+
             // Does the element have anywhere to move?
-            if ($div.index() <= ($div.siblings('div').length - 1)){
-                $div.fadeOut('slow',function(){
+            if ($div.index() <= ($div.siblings('div').length - 1)) {
+                $div.fadeOut('slow', function () {
                     $div.insertAfter($div.next('div')).fadeIn('slow');
                 });
             }
@@ -37,8 +37,13 @@ $(document).ready(function () {
             $listDiv.data('id', row.id);
             listItemHtml = '<label><input type="checkbox" name="checkbox" value="">  ' + row.item + '</label>';
             $listDiv.prepend(listItemHtml);
-            $listDiv.append('<button class="btn btn-success"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>');
-            $('#listFieldset').prepend($listDiv);
+            if (row.complete == 'y') {
+                $listDiv.css('background-color', '#5cb85c');
+                $('#listFieldset').append($listDiv);
+            } else {
+                $listDiv.append('<button class="btn btn-success"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>');
+                $('#listFieldset').prepend($listDiv);
+            }
         });
     }
 
@@ -79,7 +84,7 @@ $(document).ready(function () {
                 var id = $(this).parent().parent().data().id;
                 ids += index < $checkBoxes.length - 1 ? id.toString(10) + ', ' : id.toString(10) + ')';
             });
-            var idsObj = {ids: ids};
+            var idsObj = { ids: ids };
             $.ajax({
                 method: 'POST',//I don't know how to use DELETE to delete multiple records.
                 url: '/listItems/deleteItems',
@@ -89,8 +94,8 @@ $(document).ready(function () {
                     getListItems();
                 }
             });
-            } else {
-                alert('Close one.');
-            }
+        } else {
+            alert('Close one.');
+        }
     }
 }); //document ready end
