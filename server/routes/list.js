@@ -10,7 +10,7 @@ router.post('/', function (req, res) {
             console.log('Error connecting to database: ', errorConnectingToDatabase);
             res.sendStatus(500);
         } else {
-            client.query('INSERT INTO list (item) VALUES ($1)', [req.body.item], function (errorMakingQuery, result) {
+            client.query('INSERT INTO list (item, complete) VALUES ($1, $2)', [req.body.item, req.body.complete], function (errorMakingQuery, result) {
                 done();
                 if (errorMakingQuery) {
                     console.log('Error making database query: ', errorMakingQuery);
