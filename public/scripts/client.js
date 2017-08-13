@@ -3,7 +3,7 @@ $(document).ready(function () {
     console.log('jq ready');
     $('#addItemButton').on('click', postListItems);
     $('#deleteItemButton').on('click', deleteChecked);
-    $('#listContainer').on('click', '.btn-success', complete);
+    $('#listContainer').on('click', '.btn', complete);
     $('#itemInput').keypress(function (key) {
         if (key.which == 13) {
             postListItems();
@@ -24,9 +24,10 @@ $(document).ready(function () {
             $listDiv.prepend(listItemHtml);
             if (row.complete == 'y') {
                 $listDiv.css('background-color', '#5cb85c');
+                $listDiv.append('<button class="btn" aria-label="complete"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>');                
                 $('#listFieldset').append($listDiv);
             } else {
-                $listDiv.append('<button class="btn btn-success"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>');
+                $listDiv.append('<button class="btn btn-success" aria-label="complete"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>');
                 $('#listFieldset').prepend($listDiv);
             }
         });
@@ -88,25 +89,40 @@ $(document).ready(function () {
     function complete() {
         //console.log('item div: ', $(this).parent());
         var $div = $(this).parent();
-        updateToComplete($div.data().id);
-        $div.animate({ backgroundColor: "#5cb85c" }, 500, function () {
-            $(this).children('.btn-success').remove();
-        });
-
-        $div.data('complete', 'y');
-        //console.log($div.data().complete);
-        $listDivs = $(this).parent().siblings('div');
-        $div.fadeOut(500, function () {
-            $div.insertAfter($listDivs[$listDivs.length - 1]).fadeIn(500);
-        });
+        var status = $div.data().complete;
+        if (status == 'n') {
+            $div.data('complete', 'y');
+            updateComplete($div.data().id, 'y');
+            $div.animate({ backgroundColor: "#5cb85c" }, 500, function () {
+                $(this).children('.btn-success').removeClass('btn-success');
+            });
+            //console.log($div.data().complete);
+            $listDivs = $(this).parent().siblings('div');
+            $div.fadeOut(500, function () {
+                $div.insertAfter($listDivs[$listDivs.length - 1]).fadeIn(500);
+            });
+        } else {
+            $div.data('complete', 'n');
+            updateComplete($div.data().id, 'n');
+            $div.animate({ backgroundColor: "#5cb85c" }, 500, function () {
+                $(this).children('.btn').addClass('btn-success');
+            });
+            $firstDiv = $(this).parent().siblings('div')[0];
+            $div.fadeOut(500, function () {
+                $div.insertBefore($firstDiv).fadeIn(500);
+            });
+        }
     }
 
-    function updateToComplete(id) {
-        var idObj = { id: id };
+    function updateComplete(id, status) {
+        var listObj = { 
+            id: id,
+            complete: status
+        };
         $.ajax({
             method: 'POST',
             url: '/listItems/updateToComplete',
-            data: idObj,
+            data: listObj,
             success: function (response) {
                 console.log('delete/post request successful');
                 //getListItems();
