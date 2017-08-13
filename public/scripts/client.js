@@ -3,21 +3,13 @@ $(document).ready(function () {
     console.log('jq ready');
     $('#addItemButton').on('click', postListItems);
     $('#deleteItemButton').on('click', deleteChecked);
-    $('#listContainer').on('click', '.btn-success', function () {
-        //console.log('item div: ', $(this).parent());
-        var $div = $(this).parent();
-        updateToComplete($div.data().id);
-        $div.animate({ backgroundColor: "#5cb85c" }, 500, function () {
-            $(this).children('.btn-success').remove();
-        });
-        
-        $div.data('complete', 'y');
-        //console.log($div.data().complete);
-        $listDivs = $(this).parent().siblings('div');
-        $div.fadeOut(500, function () {
-            $div.insertAfter($listDivs[$listDivs.length - 1]).fadeIn(500);
-        });
+    $('#listContainer').on('click', '.btn-success', complete);
+    $('#itemInput').keypress(function (key) {
+        if (key.which == 13) {
+            postListItems();
+        }
     });
+
     getListItems();
     //make div wander http://jsfiddle.net/Xw29r/
 
@@ -82,7 +74,7 @@ $(document).ready(function () {
             $.ajax({
                 method: 'POST',//I don't know how to use DELETE to delete multiple records.
                 url: '/listItems/deleteItems',
-                data: idsObj, 
+                data: idsObj,
                 success: function (response) {
                     console.log('delete/post request successful');
                     getListItems();
@@ -93,12 +85,28 @@ $(document).ready(function () {
         }
     }
 
+    function complete() {
+        //console.log('item div: ', $(this).parent());
+        var $div = $(this).parent();
+        updateToComplete($div.data().id);
+        $div.animate({ backgroundColor: "#5cb85c" }, 500, function () {
+            $(this).children('.btn-success').remove();
+        });
+
+        $div.data('complete', 'y');
+        //console.log($div.data().complete);
+        $listDivs = $(this).parent().siblings('div');
+        $div.fadeOut(500, function () {
+            $div.insertAfter($listDivs[$listDivs.length - 1]).fadeIn(500);
+        });
+    }
+
     function updateToComplete(id) {
-        var idObj = {id: id};
+        var idObj = { id: id };
         $.ajax({
             method: 'POST',
             url: '/listItems/updateToComplete',
-            data: idObj, 
+            data: idObj,
             success: function (response) {
                 console.log('delete/post request successful');
                 //getListItems();
