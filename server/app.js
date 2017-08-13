@@ -7,7 +7,7 @@ var list = require('./routes/list');
 var port = 5000;
 
 
-app.use(express.static('../public'));
+app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({extended: true}));
 console.log('made it to list', list);
 app.use('/listItems', list);

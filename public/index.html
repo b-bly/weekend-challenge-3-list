@@ -6,18 +6,29 @@
     <script src="vendors/jquery.js" charset="utf-8"></script>
     <script src="scripts/client.js" charset="utf-8"></script>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <script
+     src="https://code.jquery.com/color/jquery.color-2.1.2.js"
+     integrity="sha256-1Cn7TdfHiMcEbTuku97ZRSGt2b3SvZftEIn68UMgHC8="
+     crossorigin="anonymous"></script>
      <link rel="stylesheet" type="text/css" href="styles.css">
   </head>
   <body>
-    <div class="container-fluid text-center">
-      <div class="col-sm-8 /text-left">
-        <h2 class="text-center">JEN Stack Code Challenge</h2>
+    <div id="background"></div>
+    <div class="container-fluid text-center"> 
+      <div class="col-sm-offset-2 col-sm-8 text-left"><h3 class="text-center">To Do List</h3></div>
+      <div class="addRemove col-sm-offset-2 col-sm-8 text-left">
+        <button id='deleteItemButton' class="btn-danger" aria-label"Remove item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
         <input type='text' id='itemInput' placeholder='item'/>
-        <button id='addJokeButton' class="btn-info">Add item</button>
+        <button id='addItemButton' class="btn-info" aria-label="Add item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
       </div>
     </div>
-   
-    <div id='outputDiv' class="col-sm-offset-2 col-sm-8 text-left">
+
+    <div  class="col-sm-offset-2 col-sm-8 text-left" id="listContainer">
+        <fieldset id='listFieldset' class='list'>
+        </fieldset> 
+    </div>
+    <div class="creditContainer">
+      <div id="imageCredit">Image credit: https://www.dreamstime.com/stock-illustration-pop-art-young-woman-pen-to-do-list-vector-illustration-image87264512</div>
     </div>
   </body>
 </html>

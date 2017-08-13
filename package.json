@@ -1,18 +1,26 @@
 {
   "name": "weekend-challenge-3",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "list app",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/app.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b-bly/weekend-challenge-3-list.git"
+  },
+  "author": "Brendt Bly",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/b-bly/weekend-challenge-3-list/issues"
+  },
+  "homepage": "https://github.com/b-bly/weekend-challenge-3-list#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
     "jquery": "^3.2.1",
-    "pg": "^7.1.0"
+    "pg": "^7.1.2"
   }
 }

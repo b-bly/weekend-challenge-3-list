@@ -1,24 +1,60 @@
-.container-fluid {
+
+#background {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    min-width: 400px;
+    height: 100%;
+    background-image: url("https://thumbs.dreamstime.com/z/pop-art-young-woman-pen-to-do-list-vector-illustration-87264512.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100%;
+    opacity: 0.3;
+}
+
+
+.container-fluid {
+    width: 74%;
+}
+
+.addRemove {
     display: flex;
     justify-content: space-around;
-    text-align: center;
 }
 
 .item {
-    width: 70%;
+    width: 60%;
+    min-height: 40px;
     background-color: lightgray;
     border-radius: 8px;
-    margin: 20px auto;
-    padding: 5px 30px 5px 30px;
+    padding: 5px 5px 5px 10px;
+    margin: 10px auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
 }
 
-.name {
-    font-weight: bold;
+.btn-success {
+    
+    height: 30px;
+    margin-left: auto;
 }
 
-#title {
-    text-align: center;
+.btn {
+    border-radius: 8px;
 }
+
+
+.creditContainer {
+    position: fixed; bottom: 0; left: 0; right:0; width: 100%;  
+}
+
+#imageCredit {
+
+    float: right;
+    position: relative;
+    bottom: 0;
+    right: 0;
+}
+
