@@ -12,7 +12,6 @@
     opacity: 0.3;
 }
 
-
 .container-fluid {
     width: 74%;
 }
@@ -41,7 +40,7 @@
 }
 
 #itemInput {
-    opacity: 1;
+    opacity: 1;Ï
 }
 
 .btn-success {
@@ -53,7 +52,6 @@
 .btn {
     border-radius: 8px;
 }
-
 
 .creditContainer {
     position: fixed; bottom: 0; left: 0; right:0; width: 100%;  
