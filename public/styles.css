@@ -22,7 +22,7 @@
 }
 
 .item {
-    width: 60%;
+    width: 450px;
     min-height: 40px;
     background-color: lightgray;
     border-radius: 8px;
@@ -33,6 +33,7 @@
     justify-content: space-between;
     flex-direction: row;
     opacity: 0.6;
+    
 }
 
 .item:hover {
@@ -40,7 +41,7 @@
 }
 
 #itemInput {
-    opacity: 1;Ï
+    opacity: 1;
 }
 
 .btn-success {

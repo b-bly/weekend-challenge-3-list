@@ -5,15 +5,16 @@ $(document).ready(function () {
     $('#addItemButton').on('click', postListItems); //adds new item to list from input box
     $('#deleteItemButton').on('click', deleteChecked); //deletes checked items
     $('#listContainer').on('click', '.btn', complete); // toggles tasks to complete or not complete
+    $('#chaos').on('click', animateDivs);
     $('#itemInput').keypress(function (key) { //allows user to use enter from input box
         if (key.which == 13) {
             postListItems();
         }
     });
+    
     getListItems();
-    //make div wander http://jsfiddle.net/Xw29r/
-
-
+    
+    
 }); //document ready end
 
 function prependListItems(listArray) { // parameter is rows from the database table 'list'
@@ -30,11 +31,12 @@ function prependListItems(listArray) { // parameter is rows from the database ta
             //buttons have aria-label for accessability
             //no btn-success class so that it turns gray
             $listDiv.append('<button class="btn" aria-label="complete"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>');
-            $('#listFieldset').append($listDiv);
-        } else {
+            $('#listFieldset').append($listDiv); //on bottom of list
+        } else { // if not complete, add green (btn-success) button
             $listDiv.append('<button class="btn btn-success" aria-label="complete"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>');
-            $('#listFieldset').prepend($listDiv);
+            $('#listFieldset').prepend($listDiv); //on top of list
         }
+        console.log('items: ', $('.item'));
     });
 }
 
@@ -51,7 +53,7 @@ function getListItems() { //get 'list' table from betelgeuse database
 
 function postListItems() {
     var listItemObj = {};
-    listItemObj.item = $('#itemInput').val();
+    listItemObj.item = $('#itemInput').val(); // input text for new item
     listItemObj.complete = 'n';
     console.log(listItemObj);
     $.ajax({
@@ -60,7 +62,7 @@ function postListItems() {
         data: listItemObj,
         success: function (response) {
             console.log('ajax post successful ', response);
-            getListItems();
+            getListItems(); //clear list items, load all new data and append to DOM
         }
     });
 }
@@ -137,3 +139,39 @@ function updateComplete(id, status) { //when complete button clicked, this runs 
         }
     });
 }
+
+function randomPosition() {
+    var height = $(window).height() - 70;
+    var width = $(window).width() - 450;
+    var newHeight = Math.floor(Math.random() * height);
+    var newWidth = Math.floor(Math.random() * width);
+    return [newHeight, newWidth];
+}
+
+function animateDiv(div){ //modified from http://jsfiddle.net/Xw29r/
+    //$(div).css('position', 'fixed');
+    var newPosition = randomPosition();
+    $(div).animate({ top: newPosition[0], left: newPosition[1] }, 2000, function(){
+      animateDiv(div);        
+    });
+}
+
+function animateDivs() {
+    var newPosition;
+    $('.item').each(function() {
+        newPosition = newPosition = randomPosition();
+        $(this).css({ top: newPosition[0], left: newPosition[1], position: 'fixed' }); //https://stackoverflow.com/questions/12744928/in-jquery-how-can-i-set-top-left-properties-of-an-element-with-position-values
+    });
+        $('.item').each(function() {
+        animateDiv($(this));
+    });
+}
+
+
+
+
+
+
+
+
+
