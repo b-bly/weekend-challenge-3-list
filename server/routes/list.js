@@ -9,7 +9,7 @@ router.post('/', function (req, res) {
         if (errorConnectingToDatabase) {
             console.log('Error connecting to database: ', errorConnectingToDatabase);
             res.sendStatus(500);
-        } else {
+        } else { //insert new item
             client.query('INSERT INTO list (item, complete) VALUES ($1, $2)', [req.body.item, req.body.complete], function (errorMakingQuery, result) {
                 done();
                 if (errorMakingQuery) {
@@ -29,7 +29,7 @@ router.get('/', function (req, res) {
         if (errorConnectingToDatabase) {
             console.log('Error connecting to database: ', errorConnectingToDatabase);
             res.sendStatus(500);
-        } else {
+        } else { //select the whole table
             client.query('SELECT * FROM list;', function (errorMakingQuery, result) {
                 if (errorMakingQuery) {
                     console.log('Error making database query: ', errorMakingQuery);
@@ -44,13 +44,14 @@ router.get('/', function (req, res) {
 
 router.post('/deleteItems', function (req, res) {
     console.log('list deleteItems was hit!');
-    var ids = req.body.ids.replace('"', '');
+    var ids = req.body.ids.replace('"', ''); //remove "" from the ids string
+    //Not sure if this is the best way to delete multiple entries, but it works
     pool.connect(function (errorConnectingToDatabase, client, done) {
        
         if (errorConnectingToDatabase) {
             console.log('Error connecting to database: ', errorConnectingToDatabase);
             res.sendStatus(500);
-        } else {
+        } else { //delete all entries with the ids sent
             client.query('DELETE FROM list WHERE id IN' + ids, function (errorMakingQuery, result) {
                 done();
                 if (errorMakingQuery) {
@@ -66,14 +67,14 @@ router.post('/deleteItems', function (req, res) {
 
 router.post('/updateToComplete', function (req, res) {
     console.log('updateToComplete post was hit!');
-    var id = req.body.id
+    var id = req.body.id // id of table row to update
+    var status = req.body.complete // y or n
     pool.connect(function (errorConnectingToDatabase, client, done) {
-       
         if (errorConnectingToDatabase) {
             console.log('Error connecting to database: ', errorConnectingToDatabase);
             res.sendStatus(500);
-        } else {
-            client.query('UPDATE list SET complete = \'y\' WHERE id=\'' + id + '\';', function (errorMakingQuery, result) {
+        } else { //query to update complete status of a row
+            client.query('UPDATE list SET complete = '+ status +' WHERE id=\'' + id + '\';', function (errorMakingQuery, result) {
                 done();
                 if (errorMakingQuery) {
                     console.log('Error making database query: ', errorMakingQuery);
