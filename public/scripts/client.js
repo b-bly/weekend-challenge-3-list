@@ -1,6 +1,7 @@
 
 $(document).ready(function () {
     console.log('jq ready');
+    var stop = true;
     //event handlers
     $('#addItemButton').on('click', postListItems); //adds new item to list from input box
     $('#deleteItemButton').on('click', deleteChecked); //deletes checked items
@@ -11,10 +12,10 @@ $(document).ready(function () {
             postListItems();
         }
     });
-    
+
     getListItems();
-    
-    
+
+
 }); //document ready end
 
 function prependListItems(listArray) { // parameter is rows from the database table 'list'
@@ -148,23 +149,34 @@ function randomPosition() {
     return [newHeight, newWidth];
 }
 
-function animateDiv(div){ //modified from http://jsfiddle.net/Xw29r/
-    //$(div).css('position', 'fixed');
+function animateDiv(div) { //modified from http://jsfiddle.net/Xw29r/
     var newPosition = randomPosition();
-    $(div).animate({ top: newPosition[0], left: newPosition[1] }, 2000, function(){
-      animateDiv(div);        
-    });
+    if ($('#chaos').children().hasClass('glyphicon-stop')) {
+        $(div).animate({ top: newPosition[0], left: newPosition[1] }, 2000, function () {
+            animateDiv(div);
+        });
+    } else {
+        div.removeClass('fixed');
+    }
 }
 
 function animateDivs() {
-    var newPosition;
-    $('.item').each(function() {
-        newPosition = newPosition = randomPosition();
-        $(this).css({ top: newPosition[0], left: newPosition[1], position: 'fixed' }); //https://stackoverflow.com/questions/12744928/in-jquery-how-can-i-set-top-left-properties-of-an-element-with-position-values
-    });
-        $('.item').each(function() {
-        animateDiv($(this));
-    });
+    console.log('animate divs this: ', $(this).children());
+    var $playStopIcon = $(this).children();
+    if ($playStopIcon.hasClass('glyphicon-stop')) {
+        $playStopIcon.removeClass('glyphicon-stop').addClass('glyphicon-play');
+    } else {
+        $playStopIcon.removeClass('glyphicon-play').addClass('glyphicon-stop');
+        var newPosition;
+        $('.item').each(function () {
+            newPosition = newPosition = randomPosition();
+            $(this).css({ top: newPosition[0], left: newPosition[1]}); //https://stackoverflow.com/questions/12744928/in-jquery-how-can-i-set-top-left-properties-of-an-element-with-position-values
+            $(this).addClass('fixed');
+        });
+        $('.item').each(function () {
+            animateDiv($(this));
+        });
+    }
 }
 
 

@@ -36,6 +36,10 @@
     
 }
 
+.fixed {
+    position: fixed;
+}
+
 .item:hover {
     opacity: 0.9;
 }
